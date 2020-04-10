@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		4C0E89A9244139090038BF26 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 4C0E89A8244139090038BF26 /* README.md */; };
 		4CA43C2D2440EBCD00575422 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA43C2C2440EBCD00575422 /* AppDelegate.swift */; };
 		4CA43C2F2440EBCD00575422 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA43C2E2440EBCD00575422 /* SceneDelegate.swift */; };
 		4CA43C312440EBCD00575422 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA43C302440EBCD00575422 /* ContentView.swift */; };
@@ -17,7 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		4C0E89A8244139090038BF26 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		4C0E89AA24413A6F0038BF26 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		4CA43C292440EBCD00575422 /* TabbedViews.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TabbedViews.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CA43C2C2440EBCD00575422 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4CA43C2E2440EBCD00575422 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -43,6 +42,7 @@
 		4CA43C202440EBCD00575422 = {
 			isa = PBXGroup;
 			children = (
+				4C0E89AA24413A6F0038BF26 /* README.md */,
 				4CA43C2B2440EBCD00575422 /* TabbedViews */,
 				4CA43C2A2440EBCD00575422 /* Products */,
 			);
@@ -62,7 +62,6 @@
 				4CA43C402440F21000575422 /* TabbedViews.entitlements */,
 				4CA43C2C2440EBCD00575422 /* AppDelegate.swift */,
 				4CA43C2E2440EBCD00575422 /* SceneDelegate.swift */,
-				4C0E89A8244139090038BF26 /* README.md */,
 				4CA43C302440EBCD00575422 /* ContentView.swift */,
 				4CA43C322440EBCE00575422 /* Assets.xcassets */,
 				4CA43C372440EBCE00575422 /* LaunchScreen.storyboard */,
@@ -140,7 +139,6 @@
 			files = (
 				4CA43C392440EBCE00575422 /* LaunchScreen.storyboard in Resources */,
 				4CA43C362440EBCE00575422 /* Preview Assets.xcassets in Resources */,
-				4C0E89A9244139090038BF26 /* README.md in Resources */,
 				4CA43C332440EBCE00575422 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
