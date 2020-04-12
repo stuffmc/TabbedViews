@@ -8,6 +8,53 @@
 
 import SwiftUI
 
+extension View {
+    func onHover2(perform action: @escaping (Bool) -> Void) -> some View {
+        return self.overlay(HoverRecognizer(action: action))
+    }
+}
+
+public struct HoverRecognizer: UIViewRepresentable {
+
+    var action: (Bool) -> Void
+
+    public func makeUIView(context: Context) -> UIView {
+        return HoverView(action)
+    }
+
+    public func updateUIView(_ uiView: UIView, context: Context) {
+    }
+
+    private class HoverView: UIView {
+        var action: (Bool) -> Void
+
+        init(_ action: @escaping (Bool) -> Void) {
+            self.action = action
+            super.init(frame: CGRect.zero)
+
+            self.addGestureRecognizer(UIHoverGestureRecognizer(
+                target: self,
+                action: #selector(hovering(_:))))
+        }
+
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+
+        @objc
+        func hovering(_ recognizer: UIHoverGestureRecognizer) {
+            switch recognizer.state {
+                case .began, .changed:
+                    action(true)
+                case .ended:
+                    action(false)
+                default:
+                    break
+            }
+        }
+    }
+}
+
 struct ContentView: View {
     @State var tabs = [Date()]
     @State var currentTabIndex = 0
@@ -39,15 +86,14 @@ struct ContentView: View {
                                 .background(Color.gray)
                                 .mask(RoundedRectangle(cornerRadius: 2))
                                 .hoverEffect(.highlight)
+                                .opacity(self.hoveredTabIndex == index ? 1 : 0)
+                                .animation(.default)
                                 Text(self.formatter.string(from: self.tabs[index]))
                             }
                             .frame(width: (geo.size.width - 20) / CGFloat(self.tabs.count), height: 30)
                         }
-                        .onHover {
-                            print($0)
-                            if $0 {
-                                self.hoveredTabIndex = index
-                            }
+                        .onHover2 {
+                            self.hoveredTabIndex = $0 ? index : -1
                         }
                         .padding(0)
                         .background(index == self.currentTabIndex ? Color.gray : Color.black)
