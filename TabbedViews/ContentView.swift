@@ -56,9 +56,9 @@ public struct HoverRecognizer: UIViewRepresentable {
 }
 
 struct ContentView: View {
-    @State var tabs = [Date()]
-    @State var currentTabIndex = 0
-    @State var hoveredTabIndex = -1
+    @State private var tabs = [Date()]
+    @State private var currentTabIndex = 0
+    @State private var hoveredTabIndex = -1
     
     let formatter = DateFormatter()
     
@@ -94,7 +94,7 @@ struct ContentView: View {
                             self.hoveredTabIndex = $0 ? index : -1
                         }
                         .padding(0)
-                        .background(index == self.currentTabIndex ? Color.gray : Color.black)
+                        .background(Color(white: index == self.currentTabIndex ? 0.81 : 0.74))
                         .foregroundColor(.primary)
                         .border(Color.gray.opacity(0.7), width: 1)
                     }
