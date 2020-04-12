@@ -15,7 +15,6 @@ extension View {
 }
 
 public struct HoverRecognizer: UIViewRepresentable {
-
     var action: (Bool) -> Void
 
     public func makeUIView(context: Context) -> UIView {
@@ -55,11 +54,31 @@ public struct HoverRecognizer: UIViewRepresentable {
     }
 }
 
+class TabObject: ObservableObject {
+    @Published var tabs = [Date()]
+    @Published var currentTabIndex = 0
+    
+    func remove(at index: Int? = nil) {
+        if tabs.count > 1 {
+            tabs.remove(at: index == nil ? currentTabIndex : index!)
+        }
+    }
+    
+    func append() {
+        tabs.append(Date())
+    }
+}
+
 struct ContentView: View {
     @Environment (\.colorScheme) var colorScheme: ColorScheme
     
-    @State private var tabs = [Date()]
-    @State private var currentTabIndex = 0
+    @EnvironmentObject var tabObject: TabObject
+    var tabs: [Date] {
+        tabObject.tabs
+    }
+    var currentTabIndex: Int {
+        tabObject.currentTabIndex
+    }
     @State private var hoveredTabIndex = -1
     @State private var hoveringCloseButton = false
     
@@ -75,11 +94,11 @@ struct ContentView: View {
                 Spacer(minLength: 0.5)
                 ForEach((0..<self.tabs.count), id: \.self) { index in
                     Button(action: {
-                        self.currentTabIndex = index
+                        self.tabObject.currentTabIndex = index
                     }) {
                         HStack() {
                             Button(action: {
-                                self.tabs.remove(at: index)
+                                self.tabObject.remove(at: index)
                             }) {
                                 Image(systemName: "xmark")
                             }
@@ -116,7 +135,7 @@ struct ContentView: View {
                     .border(Color.gray.opacity(0.7), width: 1)
                 }
                 AddNewTabButton {
-                    self.tabs.append(Date())
+                    self.tabObject.append()
                 }
                 .padding(5)
                 .padding(.trailing, 5)

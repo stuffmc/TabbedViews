@@ -7,11 +7,14 @@
 //
 
 import UIKit
+import SwiftUI
+import Combine
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
-
+    var tabObject = TabObject()
+    let cmdT = UIKeyCommand(input: "T", modifierFlags: .command, action: #selector(Self.commandT(command:)))
+    let cmdW = UIKeyCommand(input: "W", modifierFlags: .command, action: #selector(Self.commandW(command:)))
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -26,12 +29,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
 
-    func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
-        // Called when the user discards a scene session.
-        // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
-        // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
+    override func buildMenu(with builder: UIMenuBuilder) {
+        guard builder.system ==  .main else { return }
+        builder.remove(menu: .format)
+        let menuCmdT = UIMenu(title: "", identifier: .init("cmdT"), options: .displayInline, children: [cmdT])
+        builder.insertChild(menuCmdT, atStartOfMenu: .file)
+        builder.insertSibling(UIMenu(title: "", options: .displayInline, children: [cmdW]), afterMenu: .init("cmdT"))
     }
 
+    override var keyCommands: [UIKeyCommand]? {
+        [cmdT, cmdW]
+    }
 
+    @objc func commandT(command: UIKeyCommand) {
+        tabObject.append()
+    }
+    
+    @objc func commandW(command: UIKeyCommand) {
+        tabObject.remove()
+    }
+    
+    override func validate(_ command: UICommand) {
+        switch command.action {
+        case cmdT.action:
+            command.title = "New Tab"
+        case cmdW.action:
+            command.title = "Close Tab"
+        default:
+            print(command)
+            break
+        }
+    }
 }
 
