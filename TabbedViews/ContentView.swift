@@ -58,9 +58,7 @@ public struct HoverRecognizer: UIViewRepresentable {
 struct ContentView: View {
     @State var tabs = [Date()]
     @State var currentTabIndex = 0
-    @State var hoveredTabIndex = -1 { didSet {
-        print(hoveredTabIndex)
-    } }
+    @State var hoveredTabIndex = -1
     
     let formatter = DateFormatter()
     
