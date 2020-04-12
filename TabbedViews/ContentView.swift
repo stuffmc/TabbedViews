@@ -56,11 +56,12 @@ public struct HoverRecognizer: UIViewRepresentable {
 }
 
 struct ContentView: View {
-    @State private var tabs = [Date()]
     @Environment (\.colorScheme) var colorScheme: ColorScheme
     
+    @State private var tabs = [Date()]
     @State private var currentTabIndex = 0
     @State private var hoveredTabIndex = -1
+    @State private var hoveringCloseButton = false
     
     let formatter = DateFormatter()
     
@@ -69,58 +70,68 @@ struct ContentView: View {
     }
     
     var body: some View {
-        GeometryReader { geo in
-            VStack {
-                HStack {
-                    Spacer(minLength: 0.5)
-                    ForEach((0..<self.tabs.count), id: \.self) { index in
-                        Button(action: {
-                            self.currentTabIndex = index
-                        }) {
-                            ZStack {
-                                Text(self.formatter.string(from: self.tabs[index]))
-                                HStack() {
-                                    Button(action: {
-                                        self.tabs.remove(at: index)
-                                    }) {
-                                        Image(systemName: "xmark")
-                                    }
-                                    .padding(5)
-                                    .background(Color(white: 0.53))
-                                    .background(self.hoveredCloseButton ? Color(white: self.colorScheme == .dark ? 0.14 : 0.53) : self.tabColor(index == self.currentTabIndex))
-                                    .mask(RoundedRectangle(cornerRadius: 3))
-                                    .padding(.leading, 5)
-                                    .hoverEffect(.highlight)
-                                    .opacity(self.hoveredTabIndex == index ? 1 : 0)
-                                    .animation(.default)
-                                    Spacer()
-                                }
+        VStack {
+            HStack {
+                Spacer(minLength: 0.5)
+                ForEach((0..<self.tabs.count), id: \.self) { index in
+                    Button(action: {
+                        self.currentTabIndex = index
+                    }) {
+                        HStack() {
+                            Button(action: {
+                                self.tabs.remove(at: index)
+                            }) {
+                                Image(systemName: "xmark")
                             }
-                            .frame(height: 30)
-                            .padding(0)
+//                            .onHover2 {
+//                                print($0)
+//                                self.hoveringCloseButton = true // $0
+//                            }
+                            .padding(5)
+                            /// See comments about colors in `tabColor`
+//                                    .background(self.hoveringCloseButton ? Color(white: self.colorScheme == .dark ? 0.14 : 0.53) : self.tabColor(index == self.currentTabIndex))
+                            .background(Color(white: self.colorScheme == .dark ? 0.14 : 0.53))
+                            .mask(RoundedRectangle(cornerRadius: 3))
+                            .padding(.leading, 5)
+                            .hoverEffect(.highlight)
+//                                    .opacity(self.hoveredTabIndex == index ? 1 : 0)
+                            .opacity(self.tabs.count > 1 ? 1 : 0)
+                            .animation(.default)
+                            Group {
+                                Spacer()
+                                Text(self.formatter.string(from: self.tabs[index]))
+                                Spacer()
+                            }
+                            .onHover2 {
+                                self.hoveredTabIndex = $0 ? index : -1
+//                                print(self.hoveredTabIndex)
+//                                self.hoveringCloseButton = false
+                            }
                         }
-                        .onHover2 {
-                            self.hoveredTabIndex = $0 ? index : -1
-                        }
-                        .background(self.tabColor(index == self.currentTabIndex))
-                        .foregroundColor(.primary)
-                        .border(Color.gray.opacity(0.7), width: 1)
+                        .frame(height: 30)
+                        .padding(0)
                     }
-                    AddNewTabButton {
-                        self.tabs.append(Date())
-                    }
-                    .padding(.trailing, 10)
+                    .background(self.tabColor(index == self.currentTabIndex))
+                    .foregroundColor(.primary)
+                    .border(Color.gray.opacity(0.7), width: 1)
                 }
-                DateView(date: self.tabs[self.currentTabIndex])
-                Spacer()
+                AddNewTabButton {
+                    self.tabs.append(Date())
+                }
+                .padding(5)
+                .padding(.trailing, 5)
             }
-            .padding(0)
+            .animation(.easeIn)
+            if tabs.count > currentTabIndex {
+                DateView(date: self.tabs[currentTabIndex])
+            }
+            Spacer()
         }
     }
     
     func tabColor(_ isCurrentTabIndex: Bool) -> Color {
-        // Yes, those colors are hard coded to reflect the Safari colors. Tell me if you find a better way.
-        // One of them is `labelColor` and another one `gridColor` but I don't know a way to refer them and anyways there's no grid or label here.
+        /// Yes, those colors are hard coded to reflect the Safari colors. Tell me if you find a better way.
+        /// One of them is `labelColor` and another one `gridColor` but I don't know a way to refer them and anyways there's no grid or label here.
         Color(white: isCurrentTabIndex ? (colorScheme == .dark ? 0.16 : 0.81) : (colorScheme == .dark ? 0.09 : 0.74))
     }
 }
