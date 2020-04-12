@@ -61,6 +61,7 @@ class TabObject: ObservableObject {
     func remove(at index: Int? = nil) {
         if tabs.count > 1 {
             tabs.remove(at: index == nil ? currentTabIndex : index!)
+            currentTabIndex -= 1
         }
     }
     
